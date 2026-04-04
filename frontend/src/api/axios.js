@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-export const API_ORIGIN = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+export const API_ORIGIN = 'https://web-prog-portfolio-main-api.onrender.com';
 
 const API = axios.create({
   baseURL: `${API_ORIGIN}/api`,
