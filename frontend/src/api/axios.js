@@ -4,7 +4,7 @@ import axios from 'axios';
 export const API_ORIGIN = 'https://web-prog-portfolio-main-api.onrender.com';
 
 const API = axios.create({
-  baseURL: `${API_ORIGIN}`,
+  baseURL: `${API_ORIGIN}/api`,
 });
 
 API.interceptors.request.use((config) => {
