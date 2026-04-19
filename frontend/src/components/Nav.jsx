@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import Avatar from './Avatar';
 import { useAuth } from '../context/AuthContext';
 import { assetUrl } from '../utils/assetUrl';
 
@@ -119,9 +120,10 @@ function Nav() {
                                             onClick={closeMobile}
                                             className={`nav-profile ${location.pathname === '/profile' ? 'active' : ''}`}
                                         >
-                                            <img
-                                                src={user.profilePic ? assetUrl(user.profilePic) : '/src/assets/imgs/profile.jpg'}
-                                                alt={user.name}
+                                            <Avatar 
+                                                name={user.name}
+                                                profilePic={user.profilePic ? assetUrl(user.profilePic) : null}
+                                                size="sm"
                                                 className="nav-profile-pic"
                                             />
                                             <span className="nav-profile-name">{user.name}</span>

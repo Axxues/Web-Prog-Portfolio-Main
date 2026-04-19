@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.routes.js';
 import postRoutes from './routes/post.routes.js';
 import commentRoutes from './routes/comment.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import contactRoutes from './routes/contact.routes.js';
 
 import { fileURLToPath } from 'url';
 
@@ -30,6 +31,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/contact', contactRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 import API from '../api/axios';
 import { useAuth } from '../context/AuthContext';
@@ -38,8 +38,17 @@ function PostPage() {
       <Nav />
       <main className="container page" style={{ maxWidth: 980 }}>
         <section className="section-card">
-          <h2>{post.title}</h2>
-          <p style={{ color: 'var(--text-muted)' }}>By {post.author?.name || 'Unknown'} on {new Date(post.createdAt).toLocaleDateString()}</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: '1rem' }}>
+            <div>
+              <h2>{post.title}</h2>
+              <p style={{ color: 'var(--text-muted)' }}>By {post.author?.name || 'Unknown'} on {new Date(post.createdAt).toLocaleDateString()}</p>
+            </div>
+            {user && (post.author?._id === user.id || user.role === 'admin') && (
+              <Link to={`/edit-post/${id}`} className="btn btn-primary" style={{ whiteSpace: 'nowrap' }}>
+                Edit Post
+              </Link>
+            )}
+          </div>
           {post.image && <img src={assetUrl(post.image)} alt={post.title} style={{ width: '100%', marginTop: '1rem', borderRadius: '14px', border: '1px solid var(--border-color)' }} />}
           <p>{post.body}</p>
           <h3>Comments</h3>

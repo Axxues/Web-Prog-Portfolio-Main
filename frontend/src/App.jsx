@@ -7,11 +7,13 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import PostPage from './pages/PostPage';
 import ProfilePage from './pages/ProfilePage';
 import CreatePostPage from './pages/CreatePostPage';
 import EditPostPage from './pages/EditPostPage';
 import AdminPage from './pages/AdminPage';
+import AdminMessagesPage from './pages/AdminMessagesPage';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -51,12 +53,14 @@ function App() {
             <Route path='/about' element={<AboutPage />} />
             <Route path='/contact' element={<ContactPage />} />
             <Route path='/login' element={<LoginPage />} />
+            <Route path='/forgot-password' element={<ForgotPasswordPage />} />
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/posts/:id' element={<PostPage />} />
             <Route path='/profile' element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             <Route path='/create-post' element={<ProtectedRoute><CreatePostPage /></ProtectedRoute>} />
             <Route path='/edit-post/:id' element={<ProtectedRoute><EditPostPage /></ProtectedRoute>} />
             <Route path='/admin' element={<ProtectedRoute role='admin'><AdminPage /></ProtectedRoute>} />
+            <Route path='/admin/messages' element={<ProtectedRoute role='admin'><AdminMessagesPage /></ProtectedRoute>} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

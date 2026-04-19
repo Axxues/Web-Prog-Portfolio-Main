@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Nav from '../components/Nav';
+import Avatar from '../components/Avatar';
 import { useAuth } from '../context/AuthContext';
 import API from '../api/axios';
 import { assetUrl } from '../utils/assetUrl';
@@ -85,13 +86,12 @@ function ProfilePage() {
       <main className="container page profile-container">
         <section className="section-card profile-header">
           <div className="header-content">
-            <div className="avatar-large">
-              {profilePicPreview ? (
-                <img src={profilePicPreview} alt="Profile" className="avatar-image" />
-              ) : (
-                user?.name?.charAt(0)?.toUpperCase()
-              )}
-            </div>
+            <Avatar 
+              name={user?.name}
+              profilePic={profilePicPreview}
+              size="lg"
+              className="avatar-large-override"
+            />
             <div className="header-info">
               <h1>{user?.name}</h1>
               <p className="user-role">{user?.role === 'admin' ? 'Administrator' : 'Member'}</p>

@@ -9,6 +9,8 @@ const userSchema = new mongoose.Schema({
   status: { type: String, enum: ['active', 'inactive'], default: 'active' },
   bio: { type: String, default: '' },
   profilePic: { type: String, default: '' },
+  resetPasswordOtp: { type: String, default: null },
+  resetPasswordOtpExpire: { type: Date, default: null },
 }, { timestamps: true });
 
 userSchema.pre('save', async function () {

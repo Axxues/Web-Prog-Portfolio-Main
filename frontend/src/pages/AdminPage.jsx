@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 import API from '../api/axios';
 import { assetUrl } from '../utils/assetUrl';
+import StatisticsPage from './StatisticsPage';
 import '../styles/AdminPage.css';
 
 function AdminPage() {
@@ -67,6 +69,12 @@ function AdminPage() {
           <button className={`tab-btn ${activeTab === 'posts' ? 'active' : ''}`} onClick={() => setActiveTab('posts')}>
             Posts ({posts.length})
           </button>
+          <button className={`tab-btn ${activeTab === 'statistics' ? 'active' : ''}`} onClick={() => setActiveTab('statistics')}>
+            Statistics
+          </button>
+          <Link to="/admin/messages" className="tab-btn" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            Messages
+          </Link>
         </div>
 
         {activeTab === 'users' && (
@@ -137,6 +145,12 @@ function AdminPage() {
                 </div>
               ))}
             </div>
+          </section>
+        )}
+
+        {activeTab === 'statistics' && (
+          <section className="section-card admin-section">
+            <StatisticsPage />
           </section>
         )}
       </main>

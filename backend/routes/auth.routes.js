@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { protect } from '../middleware/auth.middleware.js';
 import upload from '../middleware/upload.js';
+import { sendOtpEmail } from '../utils/email.js';
 
 const router = express.Router();
 
@@ -65,6 +66,93 @@ router.put('/change-password', protect, async (req, res) => {
     user.password = password;
     await user.save();
     res.json({ message: 'Password changed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: 'Email is required' });
+    
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    // Save OTP and expiry to user (10 minutes)
+    user.resetPasswordOtp = otp;
+    user.resetPasswordOtpExpire = new Date(Date.now() + 10 * 60 * 1000);
+    await user.save();
+    
+    // Send OTP via email
+    const emailResult = await sendOtpEmail(email, otp);
+    
+    if (!emailResult.success) {
+      console.error('Email sending failed:', emailResult.message);
+      // In development, log OTP to console as fallback
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`[DEV MODE] OTP for ${email}: ${otp}`);
+        return res.json({ 
+          message: 'OTP sent to your email successfully',
+          devOtp: otp // Remove this in production
+        });
+      }
+      return res.status(500).json({ message: `Failed to send OTP email: ${emailResult.message}` });
+    }
+    
+    res.json({ message: 'OTP sent to your email successfully' });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: error.message || 'Internal server error' });
+  }
+});
+
+router.post('/verify-otp', async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) return res.status(400).json({ message: 'Email and OTP are required' });
+    
+    const user = await User.findOne({
+      email,
+      resetPasswordOtp: otp,
+      resetPasswordOtpExpire: { $gt: new Date() }
+    });
+    
+    if (!user) return res.status(400).json({ message: 'Invalid or expired OTP' });
+    
+    res.json({ message: 'OTP verified successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { email, otp, password } = req.body;
+    if (!email || !otp || !password) return res.status(400).json({ message: 'Email, OTP, and password are required' });
+    
+    if (password.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters' });
+    }
+    
+    const user = await User.findOne({
+      email,
+      resetPasswordOtp: otp,
+      resetPasswordOtpExpire: { $gt: new Date() }
+    });
+    
+    if (!user) return res.status(400).json({ message: 'Invalid or expired OTP' });
+    
+    // Update password and clear OTP
+    user.password = password;
+    user.resetPasswordOtp = null;
+    user.resetPasswordOtpExpire = null;
+    await user.save();
+    
+    res.json({ message: 'Password reset successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

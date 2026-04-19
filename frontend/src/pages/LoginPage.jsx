@@ -47,6 +47,9 @@ function LoginPage() {
             <div>
               <label htmlFor="password">Password</label>
               <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <Link to="/forgot-password" className="target-link" style={{ fontSize: '0.9rem', marginTop: '0.5rem', display: 'inline-block' }}>
+                Forgot password?
+              </Link>
             </div>
             <button type="submit" className="btn btn-primary">Log in</button>
           </form>
