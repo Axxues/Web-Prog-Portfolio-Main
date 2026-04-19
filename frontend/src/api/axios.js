@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Use import.meta.env for Vite (instead of process.env for Node)
-export const API_ORIGIN = import.meta.env.VITE_API_URL || 'https://web-prog-portfolio-main-api.onrender.com';
+export const API_ORIGIN = 'https://web-prog-portfolio-main-api.onrender.com';
 
 const API = axios.create({
   baseURL: `${API_ORIGIN}`,
